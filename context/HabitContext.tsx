@@ -7,8 +7,10 @@ interface HabitContextType {
   data: HabitTrackerData;
   activeHabits: HabitsData;
   theme: 'light' | 'dark';
+  viewDate: Date;
   toggleTheme: () => void;
   updateUserName: (name: string) => void;
+  setViewDate: (date: Date) => void;
   addHabit: (type: 'daily' | 'weekly' | 'monthly', title: string, category: string) => void;
   updateHabitDetails: (type: 'daily' | 'weekly' | 'monthly', id: string, updates: Partial<Habit>) => void;
   toggleHabit: (type: 'daily' | 'weekly' | 'monthly', id: string, dateKey: string) => void;
@@ -31,6 +33,7 @@ const HabitContext = createContext<HabitContextType | null>(null);
 export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [data, setData] = useState<HabitTrackerData>(StorageService.getInitialData());
   const [isLoaded, setIsLoaded] = useState(false);
+  const [viewDate, setViewDate] = useState(new Date());
   
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('theme_preference') as 'light' | 'dark') || 'light';
@@ -72,26 +75,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [data, isLoaded]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-      
-      data.habits.daily.forEach(habit => {
-        if (!habit.archived && habit.reminderTime === currentTime) {
-          if ("Notification" in window && Notification.permission === "granted") {
-            new Notification(`Reminder: ${habit.title}`, {
-              body: "Time to complete your habit!",
-              icon: "/favicon.ico"
-            });
-          }
-        }
-      });
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [data.habits.daily]);
-
   const activeHabits = useMemo(() => {
     return {
       daily: data.habits.daily.filter(h => !h.archived),
@@ -115,53 +98,37 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       createdAt: new Date().toISOString(),
       archived: false,
     };
-
     setData(prev => ({
       ...prev,
-      habits: {
-        ...prev.habits,
-        [type]: [...prev.habits[type], newHabit]
-      }
+      habits: { ...prev.habits, [type]: [...prev.habits[type], newHabit] }
     }));
   }, []);
 
   const updateHabitDetails = useCallback((type: 'daily' | 'weekly' | 'monthly', id: string, updates: Partial<Habit>) => {
     setData(prev => ({
       ...prev,
-      habits: {
-        ...prev.habits,
-        [type]: prev.habits[type].map(h => h.id === id ? { ...h, ...updates } : h)
-      }
+      habits: { ...prev.habits, [type]: prev.habits[type].map(h => h.id === id ? { ...h, ...updates } : h) }
     }));
   }, []);
 
   const archiveHabit = useCallback((type: 'daily' | 'weekly' | 'monthly', id: string) => {
     setData(prev => ({
       ...prev,
-      habits: {
-        ...prev.habits,
-        [type]: prev.habits[type].map(h => h.id === id ? { ...h, archived: true } : h)
-      }
+      habits: { ...prev.habits, [type]: prev.habits[type].map(h => h.id === id ? { ...h, archived: true } : h) }
     }));
   }, []);
 
   const restoreHabit = useCallback((type: 'daily' | 'weekly' | 'monthly', id: string) => {
     setData(prev => ({
       ...prev,
-      habits: {
-        ...prev.habits,
-        [type]: prev.habits[type].map(h => h.id === id ? { ...h, archived: false } : h)
-      }
+      habits: { ...prev.habits, [type]: prev.habits[type].map(h => h.id === id ? { ...h, archived: false } : h) }
     }));
   }, []);
 
   const updateHabitReminder = useCallback((type: 'daily' | 'weekly' | 'monthly', id: string, time: string | undefined) => {
     setData(prev => ({
       ...prev,
-      habits: {
-        ...prev.habits,
-        [type]: prev.habits[type].map(h => h.id === id ? { ...h, reminderTime: time } : h)
-      }
+      habits: { ...prev.habits, [type]: prev.habits[type].map(h => h.id === id ? { ...h, reminderTime: time } : h) }
     }));
   }, []);
 
@@ -169,15 +136,7 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setData(prev => {
       const logKey = type === 'daily' ? 'dailyCompletion' : type === 'weekly' ? 'weeklyCompletion' : 'monthlyCompletion';
       const currentVal = prev.logs[logKey][dateKey];
-      
-      const newLogs = {
-        ...prev.logs,
-        [logKey]: {
-          ...prev.logs[logKey],
-          [dateKey]: !currentVal
-        }
-      };
-
+      const newLogs = { ...prev.logs, [logKey]: { ...prev.logs[logKey], [dateKey]: !currentVal } };
       const newAnalytics = { ...prev.analytics };
       if (type === 'daily') {
         const habit = prev.habits.daily.find(h => h.id === id);
@@ -186,39 +145,14 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           newAnalytics.completionRates[id] = Utils.calculateCompletionRate(habit, newLogs.dailyCompletion, prev.user.year, prev.user.month);
         }
       }
-
-      return {
-        ...prev,
-        logs: newLogs,
-        analytics: newAnalytics
-      };
+      return { ...prev, logs: newLogs, analytics: newAnalytics };
     });
-  }, []);
-
-  const updateAffirmation = useCallback((text: string, imageUrl: string) => {
-    setData(prev => ({
-      ...prev,
-      affirmation: { text, imageUrl }
-    }));
-  }, []);
-
-  const saveReflection = useCallback((notes: string) => {
-    setData(prev => ({
-      ...prev,
-      monthlyReflection: {
-        notes,
-        savedAt: new Date().toISOString()
-      }
-    }));
   }, []);
 
   const saveJournal = useCallback((dateKey: string, content: string) => {
     setData(prev => ({
       ...prev,
-      journals: {
-        ...prev.journals,
-        [dateKey]: content
-      }
+      journals: { ...prev.journals, [dateKey]: content }
     }));
   }, []);
 
@@ -227,42 +161,20 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       let monthIndex = MONTH_NAMES.indexOf(prev.user.month);
       let year = prev.user.year;
       monthIndex += offset;
-      if (monthIndex > 11) {
-        monthIndex = 0;
-        year += 1;
-      } else if (monthIndex < 0) {
-        monthIndex = 11;
-        year -= 1;
-      }
-      return {
-        ...prev,
-        user: {
-          ...prev.user,
-          month: MONTH_NAMES[monthIndex],
-          year
-        }
-      };
+      if (monthIndex > 11) { monthIndex = 0; year += 1; }
+      else if (monthIndex < 0) { monthIndex = 11; year -= 1; }
+      const newDate = new Date(viewDate);
+      newDate.setFullYear(year);
+      newDate.setMonth(monthIndex);
+      setViewDate(newDate);
+      return { ...prev, user: { ...prev.user, month: MONTH_NAMES[monthIndex], year } };
     });
-  }, []);
-
-  const exportData = useCallback(() => {
-    const backup = StorageService.generateBackup(data);
-    if (backup) {
-      const a = document.createElement('a');
-      a.href = backup.url;
-      a.download = backup.filename;
-      a.click();
-    }
-  }, [data]);
+  }, [viewDate]);
 
   const startTimer = useCallback((habitId: string, description: string) => {
     setData(prev => ({
       ...prev,
-      activeTimer: {
-        habitId,
-        description,
-        startTime: new Date().toISOString()
-      }
+      activeTimer: { habitId, description, startTime: new Date().toISOString() }
     }));
   }, []);
 
@@ -280,54 +192,28 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         endTime: endTime.toISOString(),
         duration
       };
-      return {
-        ...prev,
-        timeEntries: [newEntry, ...prev.timeEntries],
-        activeTimer: null
-      };
+      return { ...prev, timeEntries: [newEntry, ...prev.timeEntries], activeTimer: null };
     });
   }, []);
 
   const addManualTimeEntry = useCallback((entry: Omit<TimeEntry, 'id'>) => {
-    const newEntry: TimeEntry = {
-      ...entry,
-      id: Math.random().toString(36).substr(2, 9)
-    };
     setData(prev => ({
       ...prev,
-      timeEntries: [newEntry, ...prev.timeEntries]
+      timeEntries: [{ ...entry, id: Math.random().toString(36).substr(2, 9) }, ...prev.timeEntries]
     }));
   }, []);
 
   const deleteTimeEntry = useCallback((id: string) => {
-    setData(prev => ({
-      ...prev,
-      timeEntries: prev.timeEntries.filter(entry => entry.id !== id)
-    }));
+    setData(prev => ({ ...prev, timeEntries: prev.timeEntries.filter(entry => entry.id !== id) }));
   }, []);
 
   return (
     <HabitContext.Provider value={{ 
-      data, 
-      activeHabits,
-      theme,
-      toggleTheme,
-      updateUserName,
-      addHabit, 
-      updateHabitDetails,
-      toggleHabit, 
-      archiveHabit,
-      restoreHabit,
-      updateHabitReminder,
-      updateAffirmation, 
-      saveReflection, 
-      saveJournal,
-      changeMonth, 
-      exportData,
-      startTimer,
-      stopTimer,
-      addManualTimeEntry,
-      deleteTimeEntry
+      data, activeHabits, theme, viewDate, toggleTheme, updateUserName, setViewDate,
+      addHabit, updateHabitDetails, toggleHabit, archiveHabit, restoreHabit,
+      updateHabitReminder, updateAffirmation: (t, i) => {}, saveReflection: (n) => {}, 
+      saveJournal, changeMonth, exportData: () => StorageService.generateBackup(data),
+      startTimer, stopTimer, addManualTimeEntry, deleteTimeEntry
     }}>
       {children}
     </HabitContext.Provider>

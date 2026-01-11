@@ -1,21 +1,19 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useHabits } from '../context/HabitContext';
-import { Bold, Italic, Image as ImageIcon, Save, CheckCircle } from 'lucide-react';
+import { Bold, Italic, Image as ImageIcon, Save, CheckCircle, Calendar as CalendarIcon } from 'lucide-react';
 
 export const JournalEditor: React.FC = () => {
-  const { data, saveJournal } = useHabits();
+  const { data, saveJournal, viewDate } = useHabits();
   const editorRef = useRef<HTMLDivElement>(null);
   const [isSaved, setIsSaved] = useState(false);
   
-  const today = new Date();
-  const dateKey = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
+  const dateKey = `${viewDate.getFullYear()}-${(viewDate.getMonth() + 1).toString().padStart(2, '0')}-${viewDate.getDate().toString().padStart(2, '0')}`;
 
   useEffect(() => {
-    if (editorRef.current && data.journals[dateKey]) {
-      editorRef.current.innerHTML = data.journals[dateKey];
+    if (editorRef.current) {
+      editorRef.current.innerHTML = data.journals[dateKey] || '';
     }
-  }, [dateKey]);
+  }, [dateKey, data.journals]);
 
   const handleCommand = (command: string) => {
     document.execCommand(command, false);
@@ -32,7 +30,6 @@ export const JournalEditor: React.FC = () => {
       reader.onload = (re) => {
         const url = re.target?.result as string;
         document.execCommand('insertImage', false, url);
-        // Add styling to images in contentEditable
         const images = editorRef.current?.getElementsByTagName('img');
         if (images) {
           for (let i = 0; i < images.length; i++) {
@@ -55,39 +52,30 @@ export const JournalEditor: React.FC = () => {
     }
   };
 
+  const isToday = new Date().toDateString() === viewDate.toDateString();
+
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full">
-      <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/20">
-        <div>
-          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Journal</h3>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Capture your thoughts for today</p>
+    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300">
+      <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/20">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-xl">
+            <CalendarIcon size={18} />
+          </div>
+          <div>
+            <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">
+              {isToday ? "Today's Journal" : viewDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+            </h3>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mindful Reflection</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <button 
-            onClick={() => handleCommand('bold')} 
-            className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"
-            title="Bold"
-          >
-            <Bold size={18} />
-          </button>
-          <button 
-            onClick={() => handleCommand('italic')} 
-            className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"
-            title="Italic"
-          >
-            <Italic size={18} />
-          </button>
-          <button 
-            onClick={handleImage} 
-            className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"
-            title="Insert Image"
-          >
-            <ImageIcon size={18} />
-          </button>
-          <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-2" />
+          <button onClick={() => handleCommand('bold')} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Bold size={16} /></button>
+          <button onClick={() => handleCommand('italic')} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Italic size={16} /></button>
+          <button onClick={handleImage} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><ImageIcon size={16} /></button>
+          <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
           <button 
             onClick={handleSave}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-bold text-xs transition-all ${
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${
               isSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-rose-500 text-white hover:shadow-lg'
             }`}
           >
@@ -95,11 +83,10 @@ export const JournalEditor: React.FC = () => {
           </button>
         </div>
       </div>
-      {/* Fix: Removed invalid placeholder attribute from div as it is not supported in React HTMLAttributes for div elements */}
       <div 
         ref={editorRef}
         contentEditable
-        className="flex-1 p-8 min-h-[300px] outline-none text-slate-700 dark:text-slate-200 leading-relaxed font-medium prose dark:prose-invert max-w-none overflow-y-auto custom-scrollbar"
+        className="flex-1 p-8 min-h-[350px] outline-none text-slate-700 dark:text-slate-200 leading-relaxed font-medium prose dark:prose-invert max-w-none overflow-y-auto custom-scrollbar"
       />
     </div>
   );
