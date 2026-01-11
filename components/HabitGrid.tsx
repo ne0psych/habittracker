@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHabits } from '../context/HabitContext';
 import { getDaysInMonth, getDayOfWeek, getWeeksForMonth } from '../utils/helpers';
-import { Check, Plus, Flame, Calendar, Clock, Archive, Edit2, X, Save } from 'lucide-react';
+import { Check, Plus, Flame, Calendar, Clock, Archive, Edit2, X, Save, Sparkles } from 'lucide-react';
 import { MONTH_NAMES, CATEGORIES, Habit } from '../types';
 
 // --- Edit Modal Component ---
@@ -43,59 +43,61 @@ const EditHabitModal = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden transform transition-all border dark:border-slate-700">
-        <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50 dark:bg-slate-800">
-          <h3 className="font-bold text-slate-800 dark:text-slate-100">Edit Habit</h3>
-          <button onClick={onClose} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full text-slate-500 dark:text-slate-400 transition-colors">
-            <X size={20} />
+    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-6 animate-in fade-in duration-300">
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden transform transition-all border dark:border-slate-800 animate-in zoom-in-95 duration-300">
+        <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+          <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Modify Habit</h3>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl text-slate-500 dark:text-slate-400 transition-all active:rotate-90">
+            <X size={24} />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-8 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Habit Title</label>
+            <label className="block text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Habit Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
+              className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-4 focus:ring-rose-500/10 transition-all font-semibold"
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Category</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900 bg-white cursor-pointer"
-            >
-              {CATEGORIES.map(c => (
-                <option key={c.name} value={c.name}>{c.name}</option>
-              ))}
-            </select>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-4 focus:ring-rose-500/10 bg-white cursor-pointer font-semibold appearance-none"
+              >
+                {CATEGORIES.map(c => (
+                  <option key={c.name} value={c.name}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-2">Reminder</label>
+              <input
+                type="time"
+                value={reminderTime}
+                onChange={(e) => setReminderTime(e.target.value)}
+                className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-4 focus:ring-rose-500/10 font-semibold"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Reminder Time (Optional)</label>
-            <input
-              type="time"
-              value={reminderTime}
-              onChange={(e) => setReminderTime(e.target.value)}
-              className="w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
-            />
-          </div>
-          <div className="pt-4 flex justify-end gap-2">
+          <div className="pt-4 flex gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700 rounded-lg font-medium transition-colors"
+              className="flex-1 px-6 py-3 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl font-bold transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-rose-500 text-white rounded-lg font-medium hover:bg-rose-600 transition-colors flex items-center gap-2"
+              className="flex-1 px-6 py-3 bg-slate-800 dark:bg-rose-500 text-white rounded-2xl font-bold hover:shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <Save size={18} /> Save Changes
+              <Save size={20} /> Save Changes
             </button>
           </div>
         </form>
@@ -140,7 +142,7 @@ export const HabitGrid: React.FC = () => {
   const getDayColor = (day: number) => {
     const dayOfWeek = getDayOfWeek(year, month, day);
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-    return isWeekend ? 'bg-slate-50/50 dark:bg-slate-800/50' : 'bg-white dark:bg-slate-900';
+    return isWeekend ? 'bg-slate-50/30 dark:bg-slate-900/40' : 'bg-white dark:bg-slate-950';
   };
 
   const isToday = (day: number) => {
@@ -153,7 +155,7 @@ export const HabitGrid: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
       <EditHabitModal 
         isOpen={!!editingHabit} 
         onClose={() => setEditingHabit(null)} 
@@ -162,22 +164,25 @@ export const HabitGrid: React.FC = () => {
         onSave={handleSaveEdit}
       />
 
-      {/* Add Habit Form */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 transition-shadow hover:shadow-md">
-         <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4">Add New Habit</h2>
-         <form onSubmit={handleAddHabit} className="flex flex-col gap-4">
-            <div className="flex flex-col md:flex-row gap-4">
+      {/* Add Habit Card */}
+      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-800 p-8 transition-all hover:shadow-2xl">
+         <div className="flex items-center gap-2 mb-6">
+            <Sparkles size={20} className="text-amber-400" />
+            <h2 className="text-xl font-black text-slate-800 dark:text-slate-100 tracking-tight">What's next for you?</h2>
+         </div>
+         <form onSubmit={handleAddHabit} className="flex flex-col gap-6">
+            <div className="flex flex-col xl:flex-row gap-4">
               <input
                 type="text"
-                placeholder="What do you want to achieve?"
-                className="flex-1 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900 transition-all placeholder:text-slate-400"
+                placeholder="Write a new habit (e.g., Read 10 pages, Meditate, Code...)"
+                className="flex-1 px-6 py-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white text-base font-bold focus:outline-none focus:border-rose-500/50 transition-all placeholder:text-slate-300 dark:placeholder:text-slate-600"
                 value={newHabitName}
                 onChange={(e) => setNewHabitName(e.target.value)}
               />
               <select 
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900 bg-white cursor-pointer"
+                className="px-6 py-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white text-sm font-bold focus:outline-none focus:border-rose-500/50 bg-white cursor-pointer appearance-none xl:w-48"
               >
                 {CATEGORIES.map(c => (
                   <option key={c.name} value={c.name}>{c.name}</option>
@@ -185,75 +190,73 @@ export const HabitGrid: React.FC = () => {
               </select>
             </div>
             
-            <div className="flex flex-wrap justify-between items-center gap-4">
-              <div className="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-xl">
+            <div className="flex flex-wrap justify-between items-center gap-6">
+              <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl">
                 {(['daily', 'weekly', 'monthly'] as const).map((type) => (
                   <button
                     key={type}
                     type="button"
                     onClick={() => setHabitType(type)}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all capitalize ${
+                    className={`px-6 py-2.5 text-xs font-black rounded-xl transition-all capitalize tracking-widest ${
                       habitType === type 
-                        ? 'bg-white dark:bg-slate-600 shadow-sm text-slate-800 dark:text-white' 
-                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/50 dark:hover:bg-slate-600/50'
+                        ? 'bg-white dark:bg-slate-700 shadow-lg text-slate-900 dark:text-white' 
+                        : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                   >
                     {type}
                   </button>
                 ))}
               </div>
-              <button type="submit" className="px-6 py-3 bg-rose-500 text-white font-medium rounded-xl hover:bg-rose-600 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-rose-200">
-                <Plus size={20} /> <span className="hidden sm:inline">Add Habit</span>
+              <button type="submit" className="px-10 py-4 bg-rose-500 text-white font-black text-sm tracking-widest uppercase rounded-2xl hover:bg-rose-600 active:scale-95 transition-all flex items-center justify-center gap-3 shadow-xl shadow-rose-200 dark:shadow-none">
+                <Plus size={20} /> Create Habit
               </button>
             </div>
          </form>
       </div>
 
-      {/* Daily Habits */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-        <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-rose-50/50 dark:from-rose-900/20 to-white dark:to-slate-800">
-          <div className="flex items-center gap-3">
-             <div className="p-2 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 rounded-lg shadow-sm">
-               <Flame size={20} />
+      {/* Main Habit Grid */}
+      <div className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden">
+        <div className="p-8 border-b border-slate-100 dark:border-slate-800 bg-gradient-to-r from-rose-50/30 dark:from-rose-900/10 to-transparent">
+          <div className="flex items-center gap-4">
+             <div className="p-3 bg-rose-500 text-white rounded-2xl shadow-lg shadow-rose-200 dark:shadow-none">
+               <Flame size={24} />
              </div>
              <div>
-               <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Daily Habits</h2>
-               <p className="text-sm text-slate-500 dark:text-slate-400">Track your consistency day by day</p>
+               <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight">Daily Journey</h2>
+               <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">Consistency is the secret ingredient</p>
              </div>
           </div>
         </div>
         <div className="overflow-x-auto custom-scrollbar">
           <div className="min-w-max">
-            <div className="flex border-b border-slate-100 dark:border-slate-700">
-              <div className="sticky left-0 w-72 bg-white dark:bg-slate-800 z-20 p-4 border-r border-slate-100 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">Habit</div>
+            <div className="flex border-b border-slate-100 dark:border-slate-800">
+              <div className="sticky left-0 w-80 bg-white dark:bg-slate-900 z-20 p-6 border-r border-slate-100 dark:border-slate-800 font-black text-xs uppercase tracking-widest text-slate-400">Habit Name</div>
               {days.map(day => (
-                <div key={day} className={`w-12 flex-shrink-0 text-center py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-50 dark:border-slate-700 last:border-r-0 ${isToday(day) ? 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400' : ''}`}>
+                <div key={day} className={`w-12 flex-shrink-0 text-center py-6 text-[10px] font-black tracking-tighter border-r border-slate-50 dark:border-slate-800 last:border-r-0 ${isToday(day) ? 'bg-rose-500 text-white' : 'text-slate-400 dark:text-slate-600'}`}>
                   {day}
                 </div>
               ))}
-              <div className="w-24 flex-shrink-0 text-center p-4 font-bold text-slate-600 dark:text-slate-300 bg-slate-50/50 dark:bg-slate-700/30">Streak</div>
+              <div className="w-24 flex-shrink-0 text-center p-6 font-black text-[10px] uppercase tracking-widest text-slate-400 bg-slate-50/50 dark:bg-slate-800/30">🔥 Streak</div>
             </div>
             {activeHabits.daily.map((habit, idx) => (
-              <div key={habit.id} className={`flex group hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors ${idx !== activeHabits.daily.length - 1 ? 'border-b border-slate-50 dark:border-slate-700' : ''}`}>
-                <div className="sticky left-0 w-72 bg-white dark:bg-slate-800 group-hover:bg-slate-50 dark:group-hover:bg-slate-800/80 transition-colors z-20 p-3 border-r border-slate-100 dark:border-slate-700 flex items-center justify-between gap-2 shadow-[4px_0_12px_-4px_rgba(0,0,0,0.05)]">
+              <div key={habit.id} className={`flex group hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all duration-300 ${idx !== activeHabits.daily.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''}`}>
+                <div className="sticky left-0 w-80 bg-white dark:bg-slate-900 group-hover:bg-slate-50 dark:group-hover:bg-slate-800/80 transition-colors z-20 p-5 border-r border-slate-100 dark:border-slate-800 flex items-center justify-between gap-4 shadow-[4px_0_15px_-4px_rgba(0,0,0,0.05)]">
                   <div className="flex flex-col min-w-0">
-                    <span className="truncate text-slate-800 dark:text-slate-100 text-sm font-semibold">{habit.title}</span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full w-max mt-1 font-medium ${getCategoryColor(habit.category)}`}>{habit.category}</span>
+                    <span className="truncate text-slate-800 dark:text-slate-100 text-base font-bold leading-tight">{habit.title}</span>
+                    <span className={`text-[9px] px-2.5 py-0.5 rounded-full w-fit mt-2 font-black uppercase tracking-widest ${getCategoryColor(habit.category)}`}>{habit.category}</span>
                   </div>
-                  <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0 duration-300">
                     <button 
                       onClick={() => openEditModal('daily', habit)}
-                      className="p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
-                      title="Edit"
+                      className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-all"
                     >
-                      <Edit2 size={14} />
+                      <Edit2 size={16} />
                     </button>
                     <button 
                       onClick={() => archiveHabit('daily', habit.id)}
-                      className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
-                      title="Archive"
+                      className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
                     >
-                      <Archive size={14} />
+                      <Archive size={16} />
                     </button>
                   </div>
                 </div>
@@ -261,165 +264,31 @@ export const HabitGrid: React.FC = () => {
                   const dateKey = `${year}-${(monthIndex + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}-${habit.id}`;
                   const isCompleted = !!data.logs.dailyCompletion[dateKey];
                   return (
-                    <div key={day} className={`w-12 flex-shrink-0 flex items-center justify-center border-r border-slate-50 dark:border-slate-700 last:border-r-0 ${getDayColor(day)}`}>
+                    <div key={day} className={`w-12 flex-shrink-0 flex items-center justify-center border-r border-slate-100 dark:border-slate-800 last:border-r-0 ${getDayColor(day)}`}>
                       <button
                         onClick={() => toggleHabit('daily', habit.id, dateKey)}
-                        className={`w-6 h-6 rounded-md flex items-center justify-center transition-all duration-200 ${
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 transform ${
                           isCompleted 
-                            ? 'bg-rose-500 border-rose-600 text-white shadow-sm scale-100' 
-                            : 'bg-white dark:bg-slate-900 border-2 border-black dark:border-slate-500 hover:border-rose-300 dark:hover:border-rose-400 scale-90 hover:scale-100'
-                        }`}
+                            ? 'bg-rose-500 border-rose-600 text-white shadow-lg shadow-rose-200 dark:shadow-none scale-100 rotate-0' 
+                            : 'bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-400 scale-90 hover:scale-105'
+                        } active:scale-75`}
                       >
-                        {isCompleted && <Check size={14} strokeWidth={3} />}
+                        {isCompleted && <Check size={16} strokeWidth={4} className="animate-in zoom-in duration-300" />}
                       </button>
                     </div>
                   );
                 })}
-                <div className="w-24 flex-shrink-0 flex items-center justify-center text-slate-700 dark:text-slate-200 font-bold text-sm gap-1 bg-slate-50/50 dark:bg-slate-700/30">
-                  <Flame size={14} className="text-orange-500 fill-orange-500" />
+                <div className="w-24 flex-shrink-0 flex items-center justify-center text-slate-800 dark:text-slate-100 font-black text-sm gap-1 bg-slate-50/50 dark:bg-slate-800/30">
+                  <Flame size={16} className="text-orange-500 fill-orange-500" />
                   {data.analytics.streaks[habit.id] || 0}
                 </div>
               </div>
             ))}
             {activeHabits.daily.length === 0 && (
-              <div className="p-12 text-center flex flex-col items-center justify-center text-slate-400">
-                <Flame size={48} className="mb-4 text-slate-200 dark:text-slate-700" />
-                <p>No daily habits yet. Start small!</p>
+              <div className="p-20 text-center flex flex-col items-center justify-center text-slate-300 dark:text-slate-700">
+                <Flame size={64} className="mb-4 opacity-10" />
+                <p className="text-xl font-bold tracking-tight">Your streak begins with a single step.</p>
               </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Weekly Habits */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-          <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-purple-50/50 dark:from-purple-900/20 to-white dark:to-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 dark:bg-purple-900/40 text-purple-600 dark:text-purple-400 rounded-lg shadow-sm">
-                <Clock size={20} />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Weekly Habits</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Achieve these once a week</p>
-              </div>
-            </div>
-          </div>
-          <div className="overflow-x-auto custom-scrollbar">
-             <div className="min-w-full">
-                <div className="flex border-b border-slate-100 dark:border-slate-700">
-                  <div className="w-60 flex-shrink-0 p-4 border-r border-slate-100 dark:border-slate-700 font-bold text-slate-700 dark:text-slate-200">Habit</div>
-                  {weeks.map((weekNum, i) => (
-                    <div key={weekNum} className="flex-1 min-w-[4rem] text-center p-4 text-xs font-semibold text-slate-500 dark:text-slate-400 border-r border-slate-50 dark:border-slate-700 last:border-r-0">
-                      Week {i + 1}
-                    </div>
-                  ))}
-                </div>
-                {activeHabits.weekly.map(habit => (
-                  <div key={habit.id} className="flex group hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors border-b border-slate-50 dark:border-slate-700 last:border-b-0">
-                    <div className="w-60 flex-shrink-0 p-3 border-r border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                      <div className="flex flex-col min-w-0">
-                         <span className="truncate text-slate-800 dark:text-slate-100 text-sm font-semibold">{habit.title}</span>
-                         <span className={`text-[10px] px-2 py-0.5 rounded-full w-max mt-1 font-medium ${getCategoryColor(habit.category)}`}>{habit.category}</span>
-                      </div>
-                      <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button 
-                          onClick={() => openEditModal('weekly', habit)}
-                          className="p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button 
-                          onClick={() => archiveHabit('weekly', habit.id)}
-                          className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
-                        >
-                          <Archive size={14} />
-                        </button>
-                      </div>
-                    </div>
-                    {weeks.map(weekNum => {
-                      const dateKey = `${year}-W${weekNum}-${habit.id}`;
-                      const isCompleted = !!data.logs.weeklyCompletion[dateKey];
-                      return (
-                        <div key={weekNum} className="flex-1 min-w-[4rem] flex items-center justify-center border-r border-slate-50 dark:border-slate-700 last:border-r-0 p-2">
-                           <button
-                            onClick={() => toggleHabit('weekly', habit.id, dateKey)}
-                            className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
-                              isCompleted 
-                                ? 'bg-purple-500 border-purple-600 text-white shadow-sm scale-100' 
-                                : 'bg-white dark:bg-slate-900 border-2 border-black dark:border-slate-500 hover:border-purple-300 dark:hover:border-purple-400 scale-90 hover:scale-100'
-                            }`}
-                          >
-                            {isCompleted && <Check size={16} strokeWidth={3} />}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-                {activeHabits.weekly.length === 0 && (
-                  <div className="p-12 text-center text-slate-400">No weekly habits yet.</div>
-                )}
-             </div>
-          </div>
-        </div>
-
-        {/* Monthly Habits */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-          <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-gradient-to-r from-teal-50/50 dark:from-teal-900/20 to-white dark:to-slate-800">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-teal-100 dark:bg-teal-900/40 text-teal-600 dark:text-teal-400 rounded-lg shadow-sm">
-                <Calendar size={20} />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Monthly Habits</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Big goals for {month}</p>
-              </div>
-            </div>
-          </div>
-          <div className="p-4 space-y-3">
-            {activeHabits.monthly.map(habit => {
-               const dateKey = `${year}-${(monthIndex + 1).toString().padStart(2, '0')}-${habit.id}`;
-               const isCompleted = !!data.logs.monthlyCompletion[dateKey];
-               return (
-                <div key={habit.id} className="flex group items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-700/30 rounded-xl hover:bg-white dark:hover:bg-slate-700 border border-transparent hover:border-slate-200 dark:hover:border-slate-600 hover:shadow-sm transition-all">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <span className="font-semibold text-slate-800 dark:text-slate-100 block">{habit.title}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full w-max mt-1 font-medium ${getCategoryColor(habit.category)}`}>{habit.category}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => toggleHabit('monthly', habit.id, dateKey)}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all ${
-                        isCompleted 
-                          ? 'bg-teal-500 text-white shadow-md' 
-                          : 'bg-white dark:bg-slate-900 border-2 border-black dark:border-slate-500 text-slate-500 dark:text-slate-300 hover:border-teal-400 dark:hover:border-teal-400 hover:text-teal-600 dark:hover:text-teal-400'
-                      }`}
-                    >
-                      {isCompleted ? <Check size={16} /> : "Mark Done"}
-                    </button>
-                    <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity pl-2 border-l border-slate-200 dark:border-slate-600 ml-2">
-                      <button 
-                        onClick={() => openEditModal('monthly', habit)}
-                        className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                       <button 
-                          onClick={() => archiveHabit('monthly', habit.id)}
-                          className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
-                        >
-                          <Archive size={16} />
-                        </button>
-                    </div>
-                  </div>
-                </div>
-               );
-            })}
-            {activeHabits.monthly.length === 0 && (
-              <div className="p-12 text-center text-slate-400">No monthly habits yet.</div>
             )}
           </div>
         </div>
