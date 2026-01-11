@@ -28,31 +28,31 @@ export const Settings: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-10 max-w-4xl mx-auto pb-12">
       
       {/* Profile Settings */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-        <div className="flex items-center gap-3 mb-6">
-           <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg">
-              <User size={20} />
+      <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 p-8">
+        <div className="flex items-center gap-4 mb-8">
+           <div className="p-4 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-2xl">
+              <User size={24} />
            </div>
            <div>
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Profile</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Manage your identity in the app</p>
+              <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">Personal Info</h2>
+              <p className="text-sm text-slate-500 font-medium">Customize your name and appearance</p>
            </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center gap-4">
           <input 
             type="text" 
             value={tempName}
             onChange={(e) => setTempName(e.target.value)}
-            className="flex-1 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-rose-200"
-            placeholder="Your Name"
+            className="w-full sm:flex-1 bg-slate-50 dark:bg-slate-700 border-2 border-transparent rounded-2xl px-6 py-4 text-slate-800 dark:text-slate-200 outline-none focus:border-rose-200 font-bold transition-all"
+            placeholder="What's your name?"
           />
           <button 
             onClick={handleNameSave}
-            className={`px-6 py-2 rounded-xl font-bold flex items-center gap-2 transition-all ${
-              nameSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-rose-500 text-white hover:shadow-lg'
+            className={`w-full sm:w-auto px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
+              nameSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-rose-500 text-white hover:shadow-xl active:scale-95'
             }`}
           >
             <Save size={16} /> {nameSaved ? 'Saved' : 'Save'}
@@ -61,65 +61,65 @@ export const Settings: React.FC = () => {
       </div>
 
       {/* Theme Settings */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+      <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 p-8">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-             <div className="p-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg">
-                {theme === 'light' ? <Sun size={20} /> : <Moon size={20} />}
+          <div className="flex items-center gap-4">
+             <div className="p-4 bg-purple-50 dark:bg-purple-900/20 text-purple-600 rounded-2xl">
+                {theme === 'light' ? <Sun size={24} /> : <Moon size={24} />}
              </div>
              <div>
-                <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Appearance</h2>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Switch between light and dark mode</p>
+                <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">Dark Mode</h2>
+                <p className="text-sm text-slate-500 font-medium">Switch between light and focused themes</p>
              </div>
           </div>
           <button 
             onClick={toggleTheme}
-            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none ${
+            className={`relative inline-flex h-10 w-20 items-center rounded-full transition-colors focus:outline-none ${
               theme === 'dark' ? 'bg-purple-600' : 'bg-slate-200'
             }`}
           >
             <span
               className={`${
-                theme === 'dark' ? 'translate-x-7' : 'translate-x-1'
-              } inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-200`}
+                theme === 'dark' ? 'translate-x-11' : 'translate-x-1'
+              } inline-block h-8 w-8 transform rounded-full bg-white shadow-md transition-transform duration-200`}
             />
           </button>
         </div>
       </div>
 
       {/* Reminder Settings */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
-              <Bell size={20} />
+      <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 p-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded-2xl">
+              <Bell size={24} />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Reminders</h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400">Set daily notifications for your habits</p>
+              <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">Smart Reminders</h2>
+              <p className="text-sm text-slate-500 font-medium">Daily push notifications for your habits</p>
             </div>
           </div>
           {permission !== 'granted' && (
             <button 
               onClick={requestPermission}
-              className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600"
+              className="px-6 py-2 bg-blue-500 text-white text-xs font-black uppercase tracking-widest rounded-xl hover:bg-blue-600 shadow-lg shadow-blue-200 dark:shadow-none"
             >
-              Enable Notifications
+              Enable
             </button>
           )}
         </div>
 
         {permission === 'granted' ? (
-          <div className="space-y-4">
-             {activeHabits.daily.length === 0 && <p className="text-slate-400 text-sm">No active daily habits.</p>}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             {activeHabits.daily.length === 0 && <p className="text-slate-400 font-bold col-span-2 text-center py-4">No active habits to remind you about.</p>}
              {activeHabits.daily.map(habit => (
-               <div key={habit.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
-                 <span className="font-medium text-slate-700 dark:text-slate-200">{habit.title}</span>
-                 <div className="flex items-center gap-2">
-                   <Clock size={16} className="text-slate-400" />
+               <div key={habit.id} className="flex items-center justify-between p-5 bg-slate-50 dark:bg-slate-700/30 rounded-3xl border border-transparent hover:border-blue-100 dark:hover:border-blue-900/30 transition-all group">
+                 <span className="font-bold text-slate-700 dark:text-slate-200 truncate pr-2">{habit.title}</span>
+                 <div className="flex items-center gap-3 bg-white dark:bg-slate-800 px-4 py-2 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 group-hover:shadow-md transition-all">
+                   <Clock size={16} className="text-blue-500" />
                    <input 
                     type="time" 
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-2 py-1 text-sm outline-none focus:border-blue-300 dark:text-slate-200"
+                    className="bg-transparent border-none p-0 text-sm font-black outline-none dark:text-slate-100 cursor-pointer"
                     value={habit.reminderTime || ''}
                     onChange={(e) => updateHabitReminder('daily', habit.id, e.target.value)}
                    />
@@ -128,37 +128,38 @@ export const Settings: React.FC = () => {
              ))}
           </div>
         ) : (
-          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 rounded-xl text-sm">
-            Please enable notifications to set reminders.
+          <div className="p-8 bg-amber-50 dark:bg-amber-900/10 text-amber-600 dark:text-amber-500 rounded-3xl text-sm font-bold flex flex-col items-center gap-4 border border-dashed border-amber-200 dark:border-amber-900/30">
+            <Bell className="opacity-40" size={32} />
+            <p>Notifications are required to set daily reminders.</p>
           </div>
         )}
       </div>
 
       {/* Archive Settings */}
-      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg">
-            <Archive size={20} />
+      <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 p-8">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="p-4 bg-slate-100 dark:bg-slate-700 text-slate-600 rounded-2xl">
+            <Archive size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Archived Habits</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Restore habits you previously removed</p>
+            <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">Archived Habits</h2>
+            <p className="text-sm text-slate-500 font-medium">Re-activate habits you've paused</p>
           </div>
         </div>
 
-        <div className="space-y-3">
-          {allArchived.length === 0 && <p className="text-slate-400 text-sm">No archived habits.</p>}
+        <div className="space-y-4">
+          {allArchived.length === 0 && <p className="text-slate-400 font-bold text-center py-4">The archive is empty.</p>}
           {allArchived.map(habit => (
-            <div key={habit.id} className="flex items-center justify-between p-3 border border-slate-100 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            <div key={habit.id} className="flex items-center justify-between p-5 border border-slate-100 dark:border-slate-700 rounded-[2rem] hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-all">
                <div>
-                  <span className="font-medium text-slate-700 dark:text-slate-200 block">{habit.title}</span>
-                  <span className="text-xs text-slate-400 capitalize">{habit.type}</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-200 block">{habit.title}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{habit.type}</span>
                </div>
                <button 
                 onClick={() => restoreHabit(habit.type, habit.id)}
-                className="p-2 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                className="px-6 py-2.5 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-100 rounded-2xl transition-all flex items-center gap-2 text-xs font-black uppercase tracking-widest"
                >
-                 <RotateCcw size={16} /> Restore
+                 <RotateCcw size={14} /> Restore
                </button>
             </div>
           ))}

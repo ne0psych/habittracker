@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { HabitTrackerData, Habit, MONTH_NAMES, HabitsData, ActiveTimer } from '../types';
+import { HabitTrackerData, Habit, MONTH_NAMES, HabitsData, ActiveTimer, TimeEntry } from '../types';
 import * as StorageService from '../services/storage';
 import * as Utils from '../utils/helpers';
 
@@ -22,6 +22,7 @@ interface HabitContextType {
   exportData: () => void;
   startTimer: (habitId: string, description: string) => void;
   stopTimer: () => void;
+  addManualTimeEntry: (entry: Omit<TimeEntry, 'id'>) => void;
   deleteTimeEntry: (id: string) => void;
 }
 
@@ -287,6 +288,17 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
+  const addManualTimeEntry = useCallback((entry: Omit<TimeEntry, 'id'>) => {
+    const newEntry: TimeEntry = {
+      ...entry,
+      id: Math.random().toString(36).substr(2, 9)
+    };
+    setData(prev => ({
+      ...prev,
+      timeEntries: [newEntry, ...prev.timeEntries]
+    }));
+  }, []);
+
   const deleteTimeEntry = useCallback((id: string) => {
     setData(prev => ({
       ...prev,
@@ -314,6 +326,7 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       exportData,
       startTimer,
       stopTimer,
+      addManualTimeEntry,
       deleteTimeEntry
     }}>
       {children}

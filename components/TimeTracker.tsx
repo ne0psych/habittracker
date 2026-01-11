@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useHabits } from '../context/HabitContext';
-import { Play, Square, Clock, Trash2, Tag, Calendar, Layout } from 'lucide-react';
+import { Play, Square, Clock, Trash2, Tag, Calendar, Layout, PlusCircle, X, Save } from 'lucide-react';
 
 const formatDuration = (seconds: number) => {
   const h = Math.floor(seconds / 3600);
@@ -13,11 +13,109 @@ const formatTime = (dateStr: string) => {
   return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
+const ManualEntryModal = ({ isOpen, onClose, habits, onSave }: { isOpen: boolean, onClose: () => void, habits: any[], onSave: (entry: any) => void }) => {
+  const [description, setDescription] = useState('');
+  const [habitId, setHabitId] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!habitId || !startTime || !endTime) return;
+    
+    const start = new Date(startTime);
+    const end = new Date(endTime);
+    const duration = Math.floor((end.getTime() - start.getTime()) / 1000);
+
+    if (duration <= 0) {
+      alert("End time must be after start time.");
+      return;
+    }
+
+    onSave({
+      description,
+      habitId,
+      startTime: start.toISOString(),
+      endTime: end.toISOString(),
+      duration
+    });
+    onClose();
+    // Reset
+    setDescription('');
+    setHabitId('');
+    setStartTime('');
+    setEndTime('');
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-300">
+      <div className="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl w-full max-w-lg border dark:border-slate-800">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-2xl font-black text-slate-800 dark:text-slate-100">Manual Time Entry</h3>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"><X /></button>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Description</label>
+            <input 
+              type="text" 
+              className="w-full px-5 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-rose-500/50 outline-none text-slate-800 dark:text-white font-bold" 
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What did you do?"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Habit / Project</label>
+            <select 
+              className="w-full px-5 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-rose-500/50 outline-none text-slate-800 dark:text-white font-bold appearance-none" 
+              value={habitId}
+              onChange={(e) => setHabitId(e.target.value)}
+              required
+            >
+              <option value="">Select a Habit</option>
+              {habits.map(h => <option key={h.id} value={h.id}>{h.title}</option>)}
+            </select>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Start</label>
+              <input 
+                type="datetime-local" 
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-rose-500/50 outline-none text-slate-800 dark:text-white font-bold text-sm" 
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-1">End</label>
+              <input 
+                type="datetime-local" 
+                className="w-full px-4 py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 border-2 border-transparent focus:border-rose-500/50 outline-none text-slate-800 dark:text-white font-bold text-sm" 
+                value={endTime}
+                onChange={(e) => setEndTime(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" className="w-full py-4 bg-rose-500 text-white rounded-2xl font-black uppercase tracking-widest text-xs mt-4 flex items-center justify-center gap-2 hover:bg-rose-600 active:scale-95 transition-all">
+            <Save size={18} /> Add Entry
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export const TimeTracker: React.FC = () => {
-  const { data, activeHabits, startTimer, stopTimer, deleteTimeEntry } = useHabits();
+  const { data, activeHabits, startTimer, stopTimer, addManualTimeEntry, deleteTimeEntry } = useHabits();
   const [description, setDescription] = useState('');
   const [selectedHabitId, setSelectedHabitId] = useState('');
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [isManualModalOpen, setIsManualModalOpen] = useState(false);
 
   const allHabits = [
     ...activeHabits.daily.map(h => ({ ...h, type: 'Daily' })),
@@ -64,6 +162,13 @@ export const TimeTracker: React.FC = () => {
 
   return (
     <div className="space-y-10 max-w-6xl mx-auto">
+      <ManualEntryModal 
+        isOpen={isManualModalOpen} 
+        onClose={() => setIsManualModalOpen(false)} 
+        habits={allHabits} 
+        onSave={addManualTimeEntry}
+      />
+      
       {/* Timer Bar */}
       <div className="bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] shadow-xl border border-slate-100 dark:border-slate-800 flex flex-col xl:flex-row items-center gap-6 sticky top-8 z-30 transition-all duration-500 animate-in slide-in-from-top-4 duration-700">
         <div className="flex-1 w-full relative">
@@ -99,25 +204,34 @@ export const TimeTracker: React.FC = () => {
             {formatDuration(elapsedTime)}
           </div>
 
-          <button
-            onClick={handleStartStop}
-            className={`h-14 px-10 rounded-2xl font-black text-sm tracking-widest uppercase text-white transition-all shadow-xl active:scale-90 flex items-center justify-center gap-3 ${
-              data.activeTimer 
-                ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 dark:shadow-none' 
-                : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200 dark:shadow-none'
-            }`}
-          >
-            {data.activeTimer ? (
-              <>Stop <Square size={18} fill="currentColor" /></>
-            ) : (
-              <>Start <Play size={18} fill="currentColor" /></>
-            )}
-          </button>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setIsManualModalOpen(true)}
+              className="p-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-2xl hover:bg-slate-200 transition-all active:scale-90"
+              title="Manual Entry"
+            >
+              <PlusCircle size={24} />
+            </button>
+            <button
+              onClick={handleStartStop}
+              className={`h-14 px-10 rounded-2xl font-black text-sm tracking-widest uppercase text-white transition-all shadow-xl active:scale-90 flex items-center justify-center gap-3 ${
+                data.activeTimer 
+                  ? 'bg-rose-500 hover:bg-rose-600 shadow-rose-200 dark:shadow-none' 
+                  : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200 dark:shadow-none'
+              }`}
+            >
+              {data.activeTimer ? (
+                <>Stop <Square size={18} fill="currentColor" /></>
+              ) : (
+                <>Start <Play size={18} fill="currentColor" /></>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Log List */}
-      <div className="space-y-10">
+      <div className="space-y-10 pb-12">
         {Object.entries(groupedEntries).map(([date, entries]) => {
           const totalDuration = entries.reduce((acc, curr) => acc + curr.duration, 0);
           

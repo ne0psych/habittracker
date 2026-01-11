@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-ro
 import { HabitProvider, useHabits } from './context/HabitContext';
 import { HabitGrid } from './components/HabitGrid';
 import { Dashboard } from './components/Dashboard';
+import { AnalyticsHub } from './components/AnalyticsHub';
 import { AffirmationPanel, MonthlyReflection } from './components/AffirmationAndReflection';
 import { Settings } from './components/Settings';
 import { TimeTracker } from './components/TimeTracker';
@@ -144,7 +145,7 @@ const MainContent = () => {
             </div>
           } />
           <Route path="/time" element={<TimeTracker />} />
-          <Route path="/analytics" element={<Dashboard />} />
+          <Route path="/analytics" element={<AnalyticsHub />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
@@ -180,10 +181,10 @@ const Layout = () => {
         </div>
 
         <nav className="flex-1 px-4 space-y-3 mt-4">
-          <SidebarLink to="/" icon={LayoutGrid} label="Habit Tracker" collapsed={collapsed} />
-          <SidebarLink to="/time" icon={Clock} label="Time Tracker" collapsed={collapsed} />
+          <SidebarLink to="/" icon={LayoutGrid} label="Tracker" collapsed={collapsed} />
+          <SidebarLink to="/time" icon={Clock} label="Time Log" collapsed={collapsed} />
           <SidebarLink to="/analytics" icon={PieChart} label="Analytics Hub" collapsed={collapsed} />
-          <SidebarLink to="/settings" icon={SettingsIcon} label="Account Settings" collapsed={collapsed} />
+          <SidebarLink to="/settings" icon={SettingsIcon} label="Settings" collapsed={collapsed} />
         </nav>
 
         <div className="p-4">
@@ -191,7 +192,7 @@ const Layout = () => {
             onClick={() => setCollapsed(!collapsed)}
             className="w-full flex items-center justify-center p-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl transition-all"
           >
-            {collapsed ? <PanelLeftOpen size={22} /> : <div className="flex items-center gap-2"><PanelLeftClose size={20} /> <span className="text-sm font-bold">Collapse Sidebar</span></div>}
+            {collapsed ? <PanelLeftOpen size={22} /> : <div className="flex items-center gap-2"><PanelLeftClose size={20} /> <span className="text-sm font-bold">Collapse</span></div>}
           </button>
         </div>
       </aside>
