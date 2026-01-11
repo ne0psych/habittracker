@@ -6,7 +6,49 @@ import { Dashboard } from './components/Dashboard';
 import { AffirmationPanel, MonthlyReflection } from './components/AffirmationAndReflection';
 import { Settings } from './components/Settings';
 import { TimeTracker } from './components/TimeTracker';
-import { LayoutGrid, Download, ChevronLeft, ChevronRight, PieChart, Flame, Settings as SettingsIcon, Clock, PanelLeftClose, PanelLeftOpen, Menu } from 'lucide-react';
+import { LayoutGrid, Download, ChevronLeft, ChevronRight, PieChart, Flame, Settings as SettingsIcon, Clock, PanelLeftClose, PanelLeftOpen, UserCircle } from 'lucide-react';
+
+const Onboarding = () => {
+  const { data, updateUserName } = useHabits();
+  const [name, setName] = useState('');
+
+  if (data.user.hasOnboarded) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name.trim()) {
+      updateUserName(name);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-700">
+      <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl max-w-md w-full border border-slate-100 dark:border-slate-800 text-center animate-in zoom-in-95 duration-500">
+        <div className="w-20 h-20 bg-rose-100 dark:bg-rose-900/50 text-rose-500 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-inner">
+          <UserCircle size={48} />
+        </div>
+        <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight mb-2">Welcome to PastelHabits</h2>
+        <p className="text-slate-500 dark:text-slate-400 font-medium mb-8">Let's start by getting to know you. What should we call you?</p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input 
+            type="text" 
+            autoFocus
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-6 py-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white text-lg font-bold outline-none focus:border-rose-500/50 transition-all text-center"
+          />
+          <button 
+            type="submit"
+            className="w-full py-4 bg-rose-500 text-white font-black text-sm tracking-widest uppercase rounded-2xl hover:bg-rose-600 shadow-xl shadow-rose-200 dark:shadow-none transition-all active:scale-95"
+          >
+            Start My Journey
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const SidebarLink = ({ to, icon: Icon, label, collapsed }: { to: string, icon: any, label: string, collapsed: boolean }) => {
   const location = useLocation();
@@ -40,9 +82,9 @@ const Header = () => {
     <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-6 animate-in fade-in slide-in-from-top-4 duration-700">
       <div>
         <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
-          Welcome back, <span className="text-rose-500">{data.user.name.split(' ')[0]}</span>
+          Welcome back, <span className="text-rose-500">{data.user.name}</span>
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Let's make today count towards your long-term growth.</p>
+        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Consistency is the secret to lasting success.</p>
       </div>
       
       <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
@@ -76,7 +118,7 @@ const Header = () => {
         <button 
           onClick={exportData}
           className="p-3 bg-slate-800 dark:bg-slate-700 text-white rounded-2xl hover:bg-slate-700 dark:hover:bg-slate-600 transition-all shadow-md hover:shadow-lg active:scale-95"
-          title="Export Data"
+          title="Export Backup"
         >
           <Download size={20} />
         </button>
@@ -115,7 +157,7 @@ const Layout = () => {
   
   return (
     <div className="flex min-h-screen bg-[#fcfdfe] dark:bg-slate-950 transition-colors duration-500">
-      {/* Desktop Sidebar */}
+      <Onboarding />
       <aside 
         className={`hidden md:flex flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 h-screen sticky top-0 transition-all duration-500 ease-in-out z-40 ${
           collapsed ? 'w-20' : 'w-72'
@@ -151,19 +193,9 @@ const Layout = () => {
           >
             {collapsed ? <PanelLeftOpen size={22} /> : <div className="flex items-center gap-2"><PanelLeftClose size={20} /> <span className="text-sm font-bold">Collapse Sidebar</span></div>}
           </button>
-          
-          {!collapsed && (
-            <div className="mt-4 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-800/50 p-5 rounded-3xl border border-slate-200/50 dark:border-slate-700/50">
-               <p className="text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">Growth Mindset</p>
-               <p className="text-xs text-slate-600 dark:text-slate-300 font-semibold leading-relaxed">
-                "We are what we repeatedly do. Excellence, then, is not an act, but a habit."
-               </p>
-            </div>
-          )}
         </div>
       </aside>
 
-      {/* Mobile Nav */}
       <nav className="md:hidden fixed bottom-6 left-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 z-50 flex justify-around p-3 rounded-3xl shadow-2xl">
         <Link to="/" className="text-slate-400 dark:text-slate-500 p-3 hover:text-rose-500 transition-colors"><LayoutGrid size={24} /></Link>
         <Link to="/time" className="text-slate-400 dark:text-slate-500 p-3 hover:text-rose-500 transition-colors"><Clock size={24} /></Link>

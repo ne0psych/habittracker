@@ -3,6 +3,7 @@ export interface User {
   name: string;
   month: string; // "January"
   year: number; // 2026
+  hasOnboarded: boolean;
 }
 
 export interface Habit {
@@ -21,34 +22,31 @@ export interface HabitsData {
 }
 
 export interface Logs {
-  // Key format: "YYYY-MM-DD-habitId" -> boolean | number
   dailyCompletion: Record<string, boolean>;
-  // Key format: "YYYY-Www-habitId" (ww = week number) -> boolean
   weeklyCompletion: Record<string, boolean>;
-  // Key format: "YYYY-MM-habitId" -> number (progress %) or boolean
   monthlyCompletion: Record<string, boolean>;
 }
 
 export interface Analytics {
-  streaks: Record<string, number>; // habitId -> current streak
-  completionRates: Record<string, number>; // habitId -> %
-  bestDay: string; // Day of week
-  worstDay: string; // Day of week
+  streaks: Record<string, number>;
+  completionRates: Record<string, number>;
+  bestDay: string;
+  worstDay: string;
 }
 
 export interface TimeEntry {
   id: string;
-  habitId: string; // Linked to a habit (acting as Project)
-  description: string; // Specific task description
-  startTime: string; // ISO string
-  endTime: string; // ISO string
-  duration: number; // seconds
+  habitId: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
 }
 
 export interface ActiveTimer {
   habitId: string;
   description: string;
-  startTime: string; // ISO string
+  startTime: string;
 }
 
 export interface HabitTrackerData {
@@ -66,6 +64,7 @@ export interface HabitTrackerData {
   };
   timeEntries: TimeEntry[];
   activeTimer: ActiveTimer | null;
+  journals: Record<string, string>; // dateKey (YYYY-MM-DD) -> HTML content
 }
 
 export const MONTH_NAMES = [

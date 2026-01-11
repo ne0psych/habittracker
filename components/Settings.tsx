@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
 import { useHabits } from '../context/HabitContext';
-import { Bell, RotateCcw, Archive, Clock, Moon, Sun } from 'lucide-react';
+import { Bell, RotateCcw, Archive, Clock, Moon, Sun, User, Save } from 'lucide-react';
 
 export const Settings: React.FC = () => {
-  const { data, activeHabits, restoreHabit, updateHabitReminder, theme, toggleTheme } = useHabits();
+  const { data, activeHabits, restoreHabit, updateHabitReminder, theme, toggleTheme, updateUserName } = useHabits();
   const [permission, setPermission] = useState(Notification.permission);
+  const [tempName, setTempName] = useState(data.user.name);
+  const [nameSaved, setNameSaved] = useState(false);
 
   const requestPermission = async () => {
     const result = await Notification.requestPermission();
     setPermission(result);
+  };
+
+  const handleNameSave = () => {
+    if (tempName.trim()) {
+      updateUserName(tempName);
+      setNameSaved(true);
+      setTimeout(() => setNameSaved(false), 2000);
+    }
   };
 
   const allArchived = [
@@ -20,6 +30,36 @@ export const Settings: React.FC = () => {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       
+      {/* Profile Settings */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <div className="flex items-center gap-3 mb-6">
+           <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg">
+              <User size={20} />
+           </div>
+           <div>
+              <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Profile</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Manage your identity in the app</p>
+           </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <input 
+            type="text" 
+            value={tempName}
+            onChange={(e) => setTempName(e.target.value)}
+            className="flex-1 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 text-slate-800 dark:text-slate-200 outline-none focus:ring-2 focus:ring-rose-200"
+            placeholder="Your Name"
+          />
+          <button 
+            onClick={handleNameSave}
+            className={`px-6 py-2 rounded-xl font-bold flex items-center gap-2 transition-all ${
+              nameSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-rose-500 text-white hover:shadow-lg'
+            }`}
+          >
+            <Save size={16} /> {nameSaved ? 'Saved' : 'Save'}
+          </button>
+        </div>
+      </div>
+
       {/* Theme Settings */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
         <div className="flex items-center justify-between">

@@ -12,6 +12,7 @@ export const getInitialData = (): HabitTrackerData => {
       name: "Mindful Achiever",
       month: MONTH_NAMES[now.getMonth()],
       year: now.getFullYear(),
+      hasOnboarded: false,
     },
     habits: {
       daily: [],
@@ -38,7 +39,8 @@ export const getInitialData = (): HabitTrackerData => {
       savedAt: null,
     },
     timeEntries: [],
-    activeTimer: null
+    activeTimer: null,
+    journals: {}
   };
 };
 
@@ -47,13 +49,14 @@ export const loadData = (): HabitTrackerData => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Remove community data if it exists in local storage from previous versions
       if ('community' in parsed) {
         delete parsed.community;
       }
-      // Migration: Ensure new fields exist for existing users
+      // Migration
       if (!parsed.timeEntries) parsed.timeEntries = [];
       if (!parsed.activeTimer) parsed.activeTimer = null;
+      if (!parsed.journals) parsed.journals = {};
+      if (parsed.user.hasOnboarded === undefined) parsed.user.hasOnboarded = parsed.user.name !== "Mindful Achiever";
       
       return parsed;
     }
@@ -77,8 +80,6 @@ export const generateBackup = (data: HabitTrackerData) => {
     const blob = new Blob([jsonString], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     
-    // In a real browser environment, automatic download might be blocked.
-    // We return the URL so the UI can present a button or try to trigger it.
     const now = new Date();
     const dateStr = now.toISOString().split('T')[0];
     const filename = `habit-tracker-backup-${dateStr}.json`;

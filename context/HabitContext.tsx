@@ -8,6 +8,7 @@ interface HabitContextType {
   activeHabits: HabitsData;
   theme: 'light' | 'dark';
   toggleTheme: () => void;
+  updateUserName: (name: string) => void;
   addHabit: (type: 'daily' | 'weekly' | 'monthly', title: string, category: string) => void;
   updateHabitDetails: (type: 'daily' | 'weekly' | 'monthly', id: string, updates: Partial<Habit>) => void;
   toggleHabit: (type: 'daily' | 'weekly' | 'monthly', id: string, dateKey: string) => void;
@@ -16,9 +17,9 @@ interface HabitContextType {
   updateHabitReminder: (type: 'daily' | 'weekly' | 'monthly', id: string, time: string | undefined) => void;
   updateAffirmation: (text: string, imageUrl: string) => void;
   saveReflection: (notes: string) => void;
+  saveJournal: (dateKey: string, content: string) => void;
   changeMonth: (offset: number) => void;
   exportData: () => void;
-  // Time Tracking
   startTimer: (habitId: string, description: string) => void;
   stopTimer: () => void;
   deleteTimeEntry: (id: string) => void;
@@ -30,7 +31,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [data, setData] = useState<HabitTrackerData>(StorageService.getInitialData());
   const [isLoaded, setIsLoaded] = useState(false);
   
-  // Theme State
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('theme_preference') as 'light' | 'dark') || 'light';
   });
@@ -48,38 +48,34 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   }, []);
 
-  // Load data on mount and trigger auto-backup
   useEffect(() => {
     const loadedData = StorageService.loadData();
     setData(loadedData);
     setIsLoaded(true);
     
-    // Auto-export logic (silently prepare)
-    const backup = StorageService.generateBackup(loadedData);
-    if (backup) {
-      console.log(`Backup generated at: /export/${backup.filename}`);
-    }
-
-    // Request notification permission on load
     if ("Notification" in window && Notification.permission !== "granted") {
       Notification.requestPermission();
     }
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'Remember to export your data backup before leaving!';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  // Persist on change
   useEffect(() => {
     if (isLoaded) {
       StorageService.saveData(data);
     }
   }, [data, isLoaded]);
 
-  // Notification Polling
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
       const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       
-      // Check all active daily habits for reminders
       data.habits.daily.forEach(habit => {
         if (!habit.archived && habit.reminderTime === currentTime) {
           if ("Notification" in window && Notification.permission === "granted") {
@@ -90,7 +86,7 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           }
         }
       });
-    }, 60000); // Check every minute
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [data.habits.daily]);
@@ -102,6 +98,13 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       monthly: data.habits.monthly.filter(h => !h.archived),
     };
   }, [data.habits]);
+
+  const updateUserName = useCallback((name: string) => {
+    setData(prev => ({
+      ...prev,
+      user: { ...prev.user, name, hasOnboarded: true }
+    }));
+  }, []);
 
   const addHabit = useCallback((type: 'daily' | 'weekly' | 'monthly', title: string, category: string) => {
     const newHabit: Habit = {
@@ -174,7 +177,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       };
 
-      // Recalculate analytics for this habit if it's daily
       const newAnalytics = { ...prev.analytics };
       if (type === 'daily') {
         const habit = prev.habits.daily.find(h => h.id === id);
@@ -209,13 +211,21 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }));
   }, []);
 
+  const saveJournal = useCallback((dateKey: string, content: string) => {
+    setData(prev => ({
+      ...prev,
+      journals: {
+        ...prev.journals,
+        [dateKey]: content
+      }
+    }));
+  }, []);
+
   const changeMonth = useCallback((offset: number) => {
     setData(prev => {
       let monthIndex = MONTH_NAMES.indexOf(prev.user.month);
       let year = prev.user.year;
-      
       monthIndex += offset;
-      
       if (monthIndex > 11) {
         monthIndex = 0;
         year += 1;
@@ -223,7 +233,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         monthIndex = 11;
         year -= 1;
       }
-
       return {
         ...prev,
         user: {
@@ -245,7 +254,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [data]);
 
-  // --- Time Tracking Functions ---
   const startTimer = useCallback((habitId: string, description: string) => {
     setData(prev => ({
       ...prev,
@@ -260,11 +268,9 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const stopTimer = useCallback(() => {
     setData(prev => {
       if (!prev.activeTimer) return prev;
-
       const endTime = new Date();
       const startTime = new Date(prev.activeTimer.startTime);
       const duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
-
       const newEntry = {
         id: Math.random().toString(36).substr(2, 9),
         habitId: prev.activeTimer.habitId,
@@ -273,7 +279,6 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         endTime: endTime.toISOString(),
         duration
       };
-
       return {
         ...prev,
         timeEntries: [newEntry, ...prev.timeEntries],
@@ -295,6 +300,7 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       activeHabits,
       theme,
       toggleTheme,
+      updateUserName,
       addHabit, 
       updateHabitDetails,
       toggleHabit, 
@@ -303,6 +309,7 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updateHabitReminder,
       updateAffirmation, 
       saveReflection, 
+      saveJournal,
       changeMonth, 
       exportData,
       startTimer,
