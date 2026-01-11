@@ -39,9 +39,9 @@ export const AnalyticsHub: React.FC = () => {
     <div className="space-y-10 animate-in fade-in duration-700">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Trend Chart */}
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 bg-rose-500 text-white rounded-2xl shadow-lg shadow-rose-200 dark:shadow-none">
+            <div className="p-3 bg-rose-500 text-white rounded-2xl shadow-lg shadow-rose-200 dark:shadow-none border border-rose-400 dark:border-transparent">
               <Zap size={20} />
             </div>
             <div>
@@ -65,9 +65,9 @@ export const AnalyticsHub: React.FC = () => {
         </div>
 
         {/* Habit Leaderboard */}
-        <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
           <div className="flex items-center gap-4 mb-8">
-            <div className="p-3 bg-blue-500 text-white rounded-2xl shadow-lg shadow-blue-200 dark:shadow-none">
+            <div className="p-3 bg-blue-500 text-white rounded-2xl shadow-lg shadow-blue-200 dark:shadow-none border border-blue-400 dark:border-transparent">
               <Target size={20} />
             </div>
             <div>
@@ -82,12 +82,12 @@ export const AnalyticsHub: React.FC = () => {
                   <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{h.name}</span>
                   <span className="text-xs font-black text-slate-400">{h.rate}%</span>
                 </div>
-                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
                   <div className="bg-rose-500 h-full rounded-full transition-all duration-1000" style={{ width: `${h.rate}%` }} />
                 </div>
               </div>
             )) : (
-              <p className="text-center text-slate-400 text-sm py-10">No data available yet.</p>
+              <p className="text-center text-slate-400 text-sm py-10 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">No data available yet.</p>
             )}
           </div>
         </div>

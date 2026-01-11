@@ -28,20 +28,20 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-10 animate-in fade-in duration-500">
       {/* Date Navigation & Summary */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 bg-white dark:bg-slate-900 p-6 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm">
         <div className="flex items-center gap-4">
-          <button onClick={() => handleDateChange(-1)} className="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl text-slate-400 transition-all"><ChevronLeft size={20} /></button>
+          <button onClick={() => handleDateChange(-1)} className="p-3 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl text-slate-400 transition-all"><ChevronLeft size={20} /></button>
           <div className="text-center min-w-[140px]">
             <h2 className="text-xl font-black text-slate-800 dark:text-slate-100">{viewDate.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}</h2>
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Selected Date</p>
           </div>
-          <button onClick={() => handleDateChange(1)} className="p-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl text-slate-400 transition-all"><ChevronRight size={20} /></button>
+          <button onClick={() => handleDateChange(1)} className="p-3 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl text-slate-400 transition-all"><ChevronRight size={20} /></button>
         </div>
         <div className="flex items-center gap-4 flex-wrap justify-center">
-          <div className="px-5 py-2 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-2xl font-black text-xs uppercase tracking-widest border border-rose-100 dark:border-rose-900/30">
+          <div className="px-5 py-2 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-2xl font-black text-xs uppercase tracking-widest border border-rose-200 dark:border-rose-900/30">
             {averageCompletion}% Productivity
           </div>
-          <div className="px-5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest border border-blue-100 dark:border-blue-900/30">
+          <div className="px-5 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-500 rounded-2xl font-black text-xs uppercase tracking-widest border border-blue-200 dark:border-blue-900/30">
             {totalTimeHours}h Focused
           </div>
         </div>
@@ -54,8 +54,8 @@ export const Dashboard: React.FC = () => {
           { label: 'Time Spent', value: `${totalTimeHours}h`, icon: Timer, color: 'blue' },
           { label: 'Attention', value: habitsData.filter(h => h.rate < 50).length, icon: AlertCircle, color: 'orange' }
         ].map((item, idx) => (
-          <div key={idx} className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm group hover:shadow-xl transition-all duration-500">
-            <div className="p-3 bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform">
+          <div key={idx} className="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-200 dark:border-slate-800 shadow-sm group hover:shadow-xl transition-all duration-500">
+            <div className="p-3 bg-slate-50 dark:bg-slate-800 text-slate-400 rounded-xl w-fit mb-4 group-hover:scale-110 transition-transform border border-slate-100 dark:border-slate-700">
               <item.icon size={20} />
             </div>
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{item.label}</p>

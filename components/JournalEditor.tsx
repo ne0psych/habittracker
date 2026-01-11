@@ -55,10 +55,10 @@ export const JournalEditor: React.FC = () => {
   const isToday = new Date().toDateString() === viewDate.toDateString();
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300">
-      <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/20">
+    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300">
+      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/20">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-xl">
+          <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-xl border border-rose-200 dark:border-rose-800/50">
             <CalendarIcon size={18} />
           </div>
           <div>
@@ -69,14 +69,14 @@ export const JournalEditor: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => handleCommand('bold')} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Bold size={16} /></button>
-          <button onClick={() => handleCommand('italic')} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Italic size={16} /></button>
-          <button onClick={handleImage} className="p-2 text-slate-500 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><ImageIcon size={16} /></button>
+          <button onClick={() => handleCommand('bold')} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Bold size={16} /></button>
+          <button onClick={() => handleCommand('italic')} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Italic size={16} /></button>
+          <button onClick={handleImage} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><ImageIcon size={16} /></button>
           <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
           <button 
             onClick={handleSave}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${
-              isSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-rose-500 text-white hover:shadow-lg'
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border ${
+              isSaved ? 'bg-green-500 text-white border-green-600' : 'bg-slate-800 dark:bg-rose-500 text-white border-slate-900 dark:border-rose-400 hover:shadow-lg'
             }`}
           >
             {isSaved ? <><CheckCircle size={14} /> Saved</> : <><Save size={14} /> Save Entry</>}

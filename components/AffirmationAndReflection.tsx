@@ -19,14 +19,14 @@ export const AffirmationPanel: React.FC = () => {
   };
 
   return (
-    <div className="relative rounded-2xl overflow-hidden h-48 md:h-64 shadow-md group border border-transparent dark:border-slate-700">
+    <div className="relative rounded-2xl overflow-hidden h-48 md:h-64 shadow-md group border border-slate-200 dark:border-slate-700">
       <div 
         className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
         style={{ backgroundImage: `url(${url})` }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 to-transparent flex flex-col justify-end p-6">
         {isEditing ? (
-          <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm p-4 rounded-xl space-y-3">
+          <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm p-4 rounded-xl space-y-3 border border-slate-200 dark:border-slate-700 shadow-xl">
              <input 
               className="w-full text-sm p-2 border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded"
               placeholder="Image URL"
@@ -39,7 +39,7 @@ export const AffirmationPanel: React.FC = () => {
               value={text} 
               onChange={e => setText(e.target.value)} 
             />
-            <button onClick={handleSave} className="bg-rose-500 text-white px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max hover:bg-rose-600 transition-colors">
+            <button onClick={handleSave} className="bg-rose-500 text-white px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max hover:bg-rose-600 transition-colors border border-rose-400">
               <Save size={12} /> Save
             </button>
           </div>
@@ -54,7 +54,7 @@ export const AffirmationPanel: React.FC = () => {
         
         <button 
           onClick={() => setIsEditing(!isEditing)} 
-          className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md p-2 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
+          className="absolute top-4 right-4 bg-white/20 hover:bg-white/40 backdrop-blur-md p-2 rounded-full text-white transition-all opacity-0 group-hover:opacity-100 border border-white/30"
         >
           <Edit2 size={16} />
         </button>
@@ -79,7 +79,7 @@ export const MonthlyReflection: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Monthly Reflection</h3>
         <span className="text-xs text-slate-400">
@@ -87,7 +87,7 @@ export const MonthlyReflection: React.FC = () => {
         </span>
       </div>
       <textarea
-        className="w-full h-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900 resize-none text-slate-600 dark:text-slate-200 placeholder:text-slate-400"
+        className="w-full h-40 p-4 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900 resize-none text-slate-600 dark:text-slate-200 placeholder:text-slate-400"
         placeholder="What went well this month? What can be improved? Write your thoughts..."
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
@@ -95,8 +95,8 @@ export const MonthlyReflection: React.FC = () => {
       <div className="mt-4 flex justify-end">
         <button 
           onClick={handleSave}
-          className={`px-6 py-2 rounded-lg font-medium transition-all ${
-            isSaved ? 'bg-green-500 text-white' : 'bg-slate-800 dark:bg-slate-600 text-white hover:bg-slate-700 dark:hover:bg-slate-500'
+          className={`px-6 py-2 rounded-lg font-medium transition-all border ${
+            isSaved ? 'bg-green-500 text-white border-green-600' : 'bg-slate-800 dark:bg-slate-600 text-white border-slate-900 dark:border-slate-500 hover:bg-slate-700 dark:hover:bg-slate-500'
           }`}
         >
           {isSaved ? 'Saved!' : 'Save Reflection'}
