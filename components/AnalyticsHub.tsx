@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHabits } from '../context/HabitContext';
+import { useHabits } from '../context/HabitContext.tsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, LineChart, Line, CartesianGrid } from 'recharts';
 import { Activity, TrendingUp, AlertCircle, Timer, Target, Clock, Zap } from 'lucide-react';
 

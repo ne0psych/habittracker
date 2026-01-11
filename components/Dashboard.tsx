@@ -1,7 +1,7 @@
 import React from 'react';
-import { useHabits } from '../context/HabitContext';
+import { useHabits } from '../context/HabitContext.tsx';
 import { Activity, TrendingUp, AlertCircle, Timer, ChevronLeft, ChevronRight } from 'lucide-react';
-import { JournalEditor } from './JournalEditor';
+import { JournalEditor } from './JournalEditor.tsx';
 
 export const Dashboard: React.FC = () => {
   const { data, activeHabits, viewDate, setViewDate } = useHabits();

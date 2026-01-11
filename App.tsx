@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { HabitProvider, useHabits } from './context/HabitContext';
-import { HabitGrid } from './components/HabitGrid';
-import { Dashboard } from './components/Dashboard';
-import { AnalyticsHub } from './components/AnalyticsHub';
-import { AffirmationPanel, MonthlyReflection } from './components/AffirmationAndReflection';
-import { Settings } from './components/Settings';
-import { TimeTracker } from './components/TimeTracker';
+import { HabitProvider, useHabits } from './context/HabitContext.tsx';
+import { HabitGrid } from './components/HabitGrid.tsx';
+import { Dashboard } from './components/Dashboard.tsx';
+import { AnalyticsHub } from './components/AnalyticsHub.tsx';
+import { AffirmationPanel, MonthlyReflection } from './components/AffirmationAndReflection.tsx';
+import { Settings } from './components/Settings.tsx';
+import { TimeTracker } from './components/TimeTracker.tsx';
 import { LayoutGrid, Download, ChevronLeft, ChevronRight, PieChart, Flame, Settings as SettingsIcon, Clock, PanelLeftClose, PanelLeftOpen, UserCircle } from 'lucide-react';
 
 const Onboarding = () => {

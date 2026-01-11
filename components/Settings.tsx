@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHabits } from '../context/HabitContext';
+import { useHabits } from '../context/HabitContext.tsx';
 import { Bell, RotateCcw, Archive, Clock, Moon, Sun, User, Save } from 'lucide-react';
 
 export const Settings: React.FC = () => {

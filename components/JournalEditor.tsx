@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useHabits } from '../context/HabitContext';
+import { useHabits } from '../context/HabitContext.tsx';
 import { Bold, Italic, Image as ImageIcon, Save, CheckCircle, Calendar as CalendarIcon } from 'lucide-react';
 
 export const JournalEditor: React.FC = () => {

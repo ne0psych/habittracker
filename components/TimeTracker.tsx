@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useHabits } from '../context/HabitContext';
+import { useHabits } from '../context/HabitContext.tsx';
 import { Play, Square, Clock, Trash2, Tag, Calendar, Layout, PlusCircle, X, Save } from 'lucide-react';
 
 const formatDuration = (seconds: number) => {

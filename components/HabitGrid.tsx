@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useHabits } from '../context/HabitContext';
-import { getDaysInMonth, getDayOfWeek, getWeeksForMonth } from '../utils/helpers';
+import { useHabits } from '../context/HabitContext.tsx';
+import { getDaysInMonth, getDayOfWeek, getWeeksForMonth } from '../utils/helpers.ts';
 import { Check, Plus, Flame, Calendar, Clock, Archive, Edit2, X, Save, Sparkles } from 'lucide-react';
-import { MONTH_NAMES, CATEGORIES, Habit } from '../types';
+import { MONTH_NAMES, CATEGORIES, Habit } from '../types.ts';
 
 // --- Edit Modal Component ---
 const EditHabitModal = ({ 

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { HabitTrackerData, Habit, MONTH_NAMES, HabitsData, ActiveTimer, TimeEntry } from '../types';
-import * as StorageService from '../services/storage';
-import * as Utils from '../utils/helpers';
+import { HabitTrackerData, Habit, MONTH_NAMES, HabitsData, ActiveTimer, TimeEntry } from '../types.ts';
+import * as StorageService from '../services/storage.ts';
+import * as Utils from '../utils/helpers.ts';
 
 interface HabitContextType {
   data: HabitTrackerData;
