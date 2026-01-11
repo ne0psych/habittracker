@@ -55,24 +55,24 @@ export const JournalEditor: React.FC = () => {
   const isToday = new Date().toDateString() === viewDate.toDateString();
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300">
-      <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50 dark:bg-slate-800/20">
+    <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-300 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300">
+      <div className="p-6 border-b border-slate-300 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4 bg-slate-50 dark:bg-slate-800/20">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-xl border border-rose-200 dark:border-rose-800/50">
+          <div className="p-2 bg-rose-100 dark:bg-rose-900/30 text-rose-500 rounded-xl border border-rose-300 dark:border-rose-800/50">
             <CalendarIcon size={18} />
           </div>
           <div>
             <h3 className="text-lg font-black text-slate-800 dark:text-slate-100">
               {isToday ? "Today's Journal" : viewDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
             </h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mindful Reflection</p>
+            <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Mindful Reflection</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => handleCommand('bold')} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Bold size={16} /></button>
-          <button onClick={() => handleCommand('italic')} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><Italic size={16} /></button>
-          <button onClick={handleImage} className="p-2 text-slate-500 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><ImageIcon size={16} /></button>
-          <div className="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1" />
+          <button onClick={() => handleCommand('bold')} className="p-2 text-slate-500 border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all shadow-sm"><Bold size={16} /></button>
+          <button onClick={() => handleCommand('italic')} className="p-2 text-slate-500 border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all shadow-sm"><Italic size={16} /></button>
+          <button onClick={handleImage} className="p-2 text-slate-500 border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all shadow-sm"><ImageIcon size={16} /></button>
+          <div className="w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1" />
           <button 
             onClick={handleSave}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all border ${
@@ -86,7 +86,7 @@ export const JournalEditor: React.FC = () => {
       <div 
         ref={editorRef}
         contentEditable
-        className="flex-1 p-8 min-h-[350px] outline-none text-slate-700 dark:text-slate-200 leading-relaxed font-medium prose dark:prose-invert max-w-none overflow-y-auto custom-scrollbar"
+        className="flex-1 p-8 min-h-[350px] outline-none text-slate-800 dark:text-slate-200 leading-relaxed font-medium prose dark:prose-invert max-w-none overflow-y-auto custom-scrollbar bg-slate-50/20 dark:bg-transparent"
       />
     </div>
   );

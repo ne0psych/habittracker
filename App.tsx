@@ -24,7 +24,7 @@ const Onboarding = () => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex items-center justify-center p-6 animate-in fade-in duration-700">
-      <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl max-w-md w-full border border-slate-100 dark:border-slate-800 text-center animate-in zoom-in-95 duration-500">
+      <div className="bg-white dark:bg-slate-900 p-10 rounded-[3rem] shadow-2xl max-w-md w-full border border-slate-300 dark:border-slate-800 text-center animate-in zoom-in-95 duration-500">
         <div className="w-20 h-20 bg-rose-100 dark:bg-rose-900/50 text-rose-500 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-inner">
           <UserCircle size={48} />
         </div>
@@ -37,11 +37,11 @@ const Onboarding = () => {
             placeholder="Enter your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-6 py-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white text-lg font-bold outline-none focus:border-rose-500/50 transition-all text-center"
+            className="w-full px-6 py-4 rounded-2xl border-2 border-slate-300 dark:border-slate-800 dark:bg-slate-800 dark:text-white text-lg font-bold outline-none focus:border-rose-500/50 transition-all text-center"
           />
           <button 
             type="submit"
-            className="w-full py-4 bg-rose-500 text-white font-black text-sm tracking-widest uppercase rounded-2xl hover:bg-rose-600 shadow-xl shadow-rose-200 dark:shadow-none transition-all active:scale-95"
+            className="w-full py-4 bg-rose-500 text-white font-black text-sm tracking-widest uppercase rounded-2xl hover:bg-rose-600 shadow-xl shadow-rose-200 dark:shadow-none transition-all active:scale-95 border border-rose-400 dark:border-transparent"
           >
             Start My Journey
           </button>
@@ -58,10 +58,10 @@ const SidebarLink = ({ to, icon: Icon, label, collapsed }: { to: string, icon: a
   return (
     <Link 
       to={to} 
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
+      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative border ${
         isActive 
-          ? 'bg-rose-50 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400 font-semibold shadow-sm' 
-          : 'text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100'
+          ? 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-900/30 dark:text-rose-400 dark:border-rose-800/50 font-semibold shadow-sm' 
+          : 'text-slate-500 border-transparent hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100'
       }`}
     >
       <Icon size={22} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
@@ -89,7 +89,7 @@ const Header = () => {
       </div>
       
       <div className="flex flex-wrap items-center gap-4 w-full lg:w-auto">
-        <div className="flex-1 lg:flex-none flex items-center gap-3 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-5 py-2.5 rounded-2xl border border-orange-100 dark:border-orange-900/30 shadow-sm transition-transform hover:scale-105">
+        <div className="flex-1 lg:flex-none flex items-center gap-3 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 px-5 py-2.5 rounded-2xl border border-orange-200 dark:border-orange-900/30 shadow-sm transition-transform hover:scale-105">
           <Flame size={22} className="fill-orange-500 animate-pulse" />
           <div>
             <span className="block text-[10px] font-bold uppercase tracking-widest opacity-70">Best Streak</span>
@@ -97,10 +97,10 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+        <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-slate-300 dark:border-slate-700 shadow-sm">
           <button 
             onClick={() => changeMonth(-1)}
-            className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-slate-500 dark:text-slate-400 transition-all active:scale-90"
+            className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-slate-500 dark:text-slate-400 transition-all active:scale-90 border border-transparent hover:border-slate-200"
           >
             <ChevronLeft size={20} />
           </button>
@@ -110,7 +110,7 @@ const Header = () => {
           </div>
           <button 
             onClick={() => changeMonth(1)}
-            className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-slate-500 dark:text-slate-400 transition-all active:scale-90"
+            className="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl text-slate-500 dark:text-slate-400 transition-all active:scale-90 border border-transparent hover:border-slate-200"
           >
             <ChevronRight size={20} />
           </button>
@@ -118,7 +118,7 @@ const Header = () => {
 
         <button 
           onClick={exportData}
-          className="p-3 bg-slate-800 dark:bg-slate-700 text-white rounded-2xl hover:bg-slate-700 dark:hover:bg-slate-600 transition-all shadow-md hover:shadow-lg active:scale-95"
+          className="p-3 bg-slate-800 dark:bg-slate-700 text-white rounded-2xl hover:bg-slate-700 dark:hover:bg-slate-600 transition-all shadow-md hover:shadow-lg active:scale-95 border border-slate-900 dark:border-slate-600"
           title="Export Backup"
         >
           <Download size={20} />
@@ -160,21 +160,21 @@ const Layout = () => {
     <div className="flex min-h-screen bg-[#fcfdfe] dark:bg-slate-950 transition-colors duration-500">
       <Onboarding />
       <aside 
-        className={`hidden md:flex flex-col bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 h-screen sticky top-0 transition-all duration-500 ease-in-out z-40 ${
+        className={`hidden md:flex flex-col bg-white dark:bg-slate-900 border-r border-slate-300 dark:border-slate-800 h-screen sticky top-0 transition-all duration-500 ease-in-out z-40 ${
           collapsed ? 'w-20' : 'w-72'
         }`}
       >
-        <div className={`p-8 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
+        <div className={`p-8 flex items-center border-b border-slate-100 dark:border-slate-800/50 ${collapsed ? 'justify-center' : 'justify-between'}`}>
           {!collapsed && (
             <div className="flex items-center gap-3 text-rose-500 dark:text-rose-400 font-black text-2xl tracking-tighter">
-              <div className="w-10 h-10 bg-rose-100 dark:bg-rose-900/50 rounded-2xl flex items-center justify-center shadow-inner">
+              <div className="w-10 h-10 bg-rose-100 dark:bg-rose-900/50 rounded-2xl flex items-center justify-center shadow-inner border border-rose-200 dark:border-transparent">
                 <PieChart size={22} />
               </div>
               <span className="bg-clip-text text-transparent bg-gradient-to-br from-rose-500 to-orange-400">PastelHabits</span>
             </div>
           )}
           {collapsed && (
-            <div className="w-10 h-10 bg-rose-500 rounded-2xl flex items-center justify-center text-white shadow-lg">
+            <div className="w-10 h-10 bg-rose-500 rounded-2xl flex items-center justify-center text-white shadow-lg border border-rose-600">
                <PieChart size={20} />
             </div>
           )}
@@ -187,17 +187,17 @@ const Layout = () => {
           <SidebarLink to="/settings" icon={SettingsIcon} label="Settings" collapsed={collapsed} />
         </nav>
 
-        <div className="p-4">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800">
           <button 
             onClick={() => setCollapsed(!collapsed)}
-            className="w-full flex items-center justify-center p-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl transition-all"
+            className="w-full flex items-center justify-center p-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-2xl transition-all border border-transparent hover:border-slate-200"
           >
             {collapsed ? <PanelLeftOpen size={22} /> : <div className="flex items-center gap-2"><PanelLeftClose size={20} /> <span className="text-sm font-bold">Collapse</span></div>}
           </button>
         </div>
       </aside>
 
-      <nav className="md:hidden fixed bottom-6 left-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 z-50 flex justify-around p-3 rounded-3xl shadow-2xl">
+      <nav className="md:hidden fixed bottom-6 left-6 right-6 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-300 dark:border-slate-800 z-50 flex justify-around p-3 rounded-3xl shadow-2xl">
         <Link to="/" className="text-slate-400 dark:text-slate-500 p-3 hover:text-rose-500 transition-colors"><LayoutGrid size={24} /></Link>
         <Link to="/time" className="text-slate-400 dark:text-slate-500 p-3 hover:text-rose-500 transition-colors"><Clock size={24} /></Link>
         <Link to="/analytics" className="text-slate-400 dark:text-slate-500 p-3 hover:text-rose-500 transition-colors"><PieChart size={24} /></Link>
